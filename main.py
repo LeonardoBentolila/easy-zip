@@ -13,6 +13,11 @@ def main(input_folder, output_zip, add_empty_folders, filters):
     else:
         out = CWD / f"{input_folder.name}.zip"
 
+    # test ouput format
+    if out.suffix != ".zip":
+        print("ERROR! Invalid output file format! Only zip file accepted!")
+        return False
+
     # get add empty folder option
     add_empty = bool(add_empty_folders)
 
