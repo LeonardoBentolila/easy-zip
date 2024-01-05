@@ -1,16 +1,27 @@
 # easy-zip
 Easy CLI to zip entire folders into zip file using python with progress bar and total files listed.
 
-accepted flags:
+# installation:
+Install requirements.txt
 
--path : path of the folder to zip;
+create executable with command: ```pyinstaller .\main.py --name=easyzip```
 
--output : zip output file path (if none given, will create file with at the same directory of target folder);
+add ```.\build\easyzip``` to path
 
--addEmpty : flag to indicate that you want to add empty sub folders to final zip file. Default is set to False (won't save empty folders to zip file);
+# Usage:
+positional arg:
 
--filter : files filter to add specific files types to final zip. Defalt is set to ("*") all files;
+ => path of the folder to zip;
 
--help : print help;
+options:
 
+-o / --output : zip output file path (if none given, will create file with the same name as target folder at the current directory);
+
+-ae / --addEmpty : flag to indicate that you want to add empty sub folders to final zip file. Default is set to False (won't save empty folders to zip file);
+
+-f / --filter : files filter to add specific files types to final zip. Defalt is set to ("*") all files;
+
+-h : print help;
+
+# Copyright:
 @leobazao 2024
