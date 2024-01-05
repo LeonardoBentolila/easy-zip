@@ -6,7 +6,7 @@ Install requirements.txt
 
 create executable with command: ```pyinstaller .\main.py --name=easyzip```
 
-add ```.\build\easyzip``` to path
+add ```.\dist\easyzip``` to path
 
 # Usage:
 positional arg:
