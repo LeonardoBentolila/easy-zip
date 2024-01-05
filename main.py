@@ -3,13 +3,13 @@ from pathlib import Path
 from utils import compact_folder
 
 # current working directory
-CWD = Path.cwd()
+CWD = Path.cwd().resolve()
 
 
 def main(input_folder, output_zip, add_empty_folders, filters):
     # get output zip file path
     if bool(output_zip):
-        out = Path(output_zip)
+        out = Path(output_zip).resolve()
     else:
         out = CWD / f"{input_folder.name}.zip"
 
@@ -30,25 +30,23 @@ def main(input_folder, output_zip, add_empty_folders, filters):
 
 
 if __name__ == '__main__':
+    # parse arguments
     parser = argparse.ArgumentParser()
-    parser.add_argument("path")
-    parser.add_argument("output")
-    parser.add_argument("addEmpty")
-    parser.add_argument("filter")
-    parser.add_argument("help")
-    args = parser.parse_args()
+    parser.add_argument("path", help="path of the folder to zip", type=str)
+    parser.add_argument("-o", "--output", type=str,
+                        help="output zipfile path (if none, will create file at the same directory of target folder)")
+    parser.add_argument("-ae", "--addEmpty",
+                        help="indicate that you want to add empty sub folders to final zip file. Default is False",
+                        action="store_true")
+    parser.add_argument("-f", "--filter", type=str,
+                        help="files filter to add specific files types to final zip. Default is set to ('*') all files")
 
+    # get arguments
+    args = parser.parse_args()
     target_dir = Path(args.path)
     output = args.output
     add_empty = args.addEmpty
-    files_filter = args.filter
-    help = args.help
-
-    # if help argument
-    if help:
-        readme = CWD / "README.md"
-        print(readme.read_text())
-        raise SystemExit(0)
+    files_filter = "*" if not args.filter else args.filter
 
     if not target_dir.exists():
         print("The target directory doesn't exist!")
