@@ -11,7 +11,7 @@ def ask_user(msg):
     return inp
 
 
-def format_file_path(file_path, limit=50):
+def format_file_path(file_path, limit=30):
     """
     format the string to get fixed size in the loading bar
     :param file_path: str string to format
@@ -35,22 +35,22 @@ def compact_folder(folder, zip_path, add_empty_folders=False, filter_items="*"):
     :return: str zipfile path generated
     """
     error_list = []
-    sub_paths = folder.rglob(filter_items)
+    sub_paths = list(folder.rglob(filter_items))
     if not add_empty_folders:
-        sub_paths = list(filter(lambda x: not x.is_dir() or len(x.glob("*")) != 0, sub_paths))
+        sub_paths = list(filter(lambda x: not x.is_dir() or len(list(x.glob("*"))) != 0, sub_paths))
     print(f"{len(sub_paths)} files listed...")
     digits = len(str(len(sub_paths)))
     pb = tqdm(total=len(sub_paths), desc="start compressing...", leave=False)
     with ZipFile(zip_path, 'w', compression=ZIP_DEFLATED) as zip_file:
         for i, item in enumerate(sub_paths):
             pb.set_description_str(f"Compacting File [{i:0{digits}d}/{len(sub_paths)}]: "
-                                   f"{format_file_path(item['relative_path'])}")
+                                   f"{format_file_path(str(item.relative_to(folder)))}")
             pb.update()
             try:
-                zip_file.write(item["path"], item["relative_path"])
+                zip_file.write(item.resolve(), item.relative_to(folder))
             except Exception as e:
                 print(e)
-                error_list.append(item["relative_path"])
+                error_list.append(item.relative_to(folder))
     pb.clear()
     print(f"Compress finished with {len(error_list)} errors")
     if len(error_list) != 0:
